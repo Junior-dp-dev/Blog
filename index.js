@@ -35,7 +35,6 @@ const postSchema = new mongoose.Schema({
 });
 const Post = mongoose.model("Post", postSchema);
 
-let posts = [];
 app.get("/", function (req, res) {
   Post.find({}, (err, result) => {
     res.render("home", {
@@ -58,30 +57,27 @@ app.get("/compose", function (req, res) {
 });
 
 app.get("/posts/:postName", function (req, res) {
-  const requestedTitle = _.lowerCase(req.params.postName);
+  const requestedId = req.params.postName;
+  console.log(requestedId);
 
-  posts.forEach(function (post) {
-    const storedTitle = _.lowerCase(post.title);
-
-    if (storedTitle === requestedTitle) {
+  Post.findOne({ _id: requestedId }, (err, result) => {
+    if (!err) {
       res.render("post", {
-        title: post.title,
-        content: post.content,
+        title: result.title,
+        content: result.content,
       });
     }
   });
 });
 
 app.post("/compose", function (req, res) {
-  const post = new Post({ title: req.body.postTitle, content: req.body.postBody });
-  post.save();
-  res.redirect("/");
-
-  /*   const post = {
-    title: req.body.postTitle,
-    content: req.body.postBody,
-  };
-  posts.push(post); */
+  const post = new Post({ title: _.capitalize(req.body.postTitle), content: req.body.postBody });
+  console.log(post);
+  post.save((err) => {
+    if (!err) {
+      res.redirect("/");
+    }
+  });
 });
 
 app.listen(process.env.PORT || 3000, function () {
