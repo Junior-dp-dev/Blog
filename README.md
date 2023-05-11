@@ -1,4 +1,4 @@
-# Blog - PROJETO DE CURSO
+# BLOG - PROJETO DE CURSO
 
 Um projeto feito no curso The Complete 2023 Web Development Bootcamp - Dr. Angela Yu, onde aprendi varios conceitos que compõe esse tipo de projeto
 
